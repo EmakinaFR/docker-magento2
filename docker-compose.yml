@@ -1,0 +1,41 @@
+version: "2"
+
+services:
+  nginx:
+    build: nginx
+    env_file: docker-env
+    ports:
+      - "80:80"
+    volumes:
+      - ~/www:/var/www/html
+    tty: true
+
+  php:
+    build: php
+    env_file: docker-env
+    ports:
+      - "9000:9000"
+    volumes:
+      - ~/www:/var/www/html
+    tty: true
+
+  mysql:
+    image: percona:latest
+    env_file: docker-env
+    ports:
+      - "3306:3306"
+    tty: true
+
+  memcached:
+    image: memcached:latest
+    env_file: docker-env
+    ports:
+      - "11211:11211"
+    tty: true
+
+  redis:
+    image: redis:latest
+    env_file: docker-env
+    ports:
+      - "6379:6379"
+    tty: true

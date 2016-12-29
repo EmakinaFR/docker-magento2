@@ -1,13 +1,15 @@
-version: "2"
+version: "2.1"
 
 services:
   nginx:
-    build: nginx
+    image: nginx:latest
     env_file: docker-env
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
-      - ~/www:/var/www/html
+      - "./docker/nginx:/etc/nginx/conf.d"
+    volumes_from:
+      - php
     tty: true
 
   php:
@@ -16,6 +18,7 @@ services:
     ports:
       - "9000:9000"
     volumes:
+      - "./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini"
       - ~/www:/var/www/html
     tty: true
 
@@ -24,13 +27,8 @@ services:
     env_file: docker-env
     ports:
       - "3306:3306"
-    tty: true
-
-  memcached:
-    image: memcached:latest
-    env_file: docker-env
-    ports:
-      - "11211:11211"
+    volumes:
+      - "mysql:/var/lib/mysql"
     tty: true
 
   redis:
@@ -39,3 +37,18 @@ services:
     ports:
       - "6379:6379"
     tty: true
+
+  varnish:
+    build: varnish
+    env_file: docker-env
+    depends_on:
+      - nginx
+      - php
+    ports:
+      - "80:8080"
+    volumes:
+      - "./docker/varnish/default.vcl:/etc/varnish/default.vcl"
+    tty: true
+
+volumes:
+  mysql: {}

@@ -1,8 +1,6 @@
-FROM php:7-fpm
+FROM php:7.0-fpm
 
 MAINTAINER Alexandre JARDIN <aja@emakina.fr>
-
-COPY extra/*.ini /usr/local/etc/php/conf.d/
 
 RUN apt-get update \
     && apt-get install -y \
@@ -37,8 +35,6 @@ RUN apt-get update \
         zip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/php-memcached-dev/php-memcached /php-memcached \
-    && cd /php-memcached && git checkout php7 \
-    && phpize && ./configure && make && make install
+RUN touch /usr/local/etc/php/custom.ini
 
 RUN usermod -u 1000 www-data

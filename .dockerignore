@@ -1,4 +1,5 @@
 .git/
+.idea/
 .gitignore
 docker-env.dist
 LICENSE

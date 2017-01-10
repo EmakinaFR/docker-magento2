@@ -4,6 +4,8 @@ services:
   nginx:
     image: nginx:latest
     env_file: docker-env
+    depends_on:
+      - php
     ports:
       - "8080:80"
     volumes:

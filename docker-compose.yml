@@ -33,6 +33,15 @@ services:
       - "mysql:/var/lib/mysql"
     tty: true
 
+  elasticsearch:
+    image: elasticsearch:2
+    env_file: docker-env
+    ports:
+      - "9200:9200"
+    volumes:
+      - "./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+    tty: true
+
   redis:
     image: redis:latest
     env_file: docker-env

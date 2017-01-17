@@ -25,12 +25,13 @@ services:
       - ~/www:/var/www/html
     tty: true
 
-  mysql:
+  percona:
     image: percona:latest
     env_file: docker-env
     ports:
       - "3306:3306"
     volumes:
+      - "./docker/percona/custom.cnf:/etc/mysql/conf.d/custom.cnf"
       - "mysql:/var/lib/mysql"
     tty: true
 

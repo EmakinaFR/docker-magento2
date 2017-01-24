@@ -33,8 +33,14 @@ RUN apt-get update \
         xml \
         xsl \
         zip \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && touch /usr/local/etc/php/custom.ini
 
-RUN touch /usr/local/etc/php/custom.ini
+RUN apt-get update \
+    && apt-get install -y bzip2 \
+    && curl -sL https://deb.nodesource.com/setup_7.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g grunt-cli
 
 RUN usermod -u 1000 www-data

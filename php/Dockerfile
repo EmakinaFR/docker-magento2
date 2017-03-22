@@ -14,6 +14,7 @@ RUN apt-get update \
         libpng-dev \
         libxml2-dev \
         libxslt-dev \
+	sendmail \
     && docker-php-ext-configure bcmath \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) \
@@ -43,4 +44,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g grunt-cli
 
+ADD sendmailhosts.sh /home/sendmailhosts.sh
+
 RUN usermod -u 1000 www-data
+
+CMD sh /home/sendmailhosts.sh && /etc/init.d/sendmail start && sendmailconfig

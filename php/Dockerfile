@@ -42,5 +42,12 @@ RUN apt-get update \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g grunt-cli
+	
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
+	
+RUN curl -O https://files.magerun.net/n98-magerun2.phar \
+    && chmod +x n98-magerun2.phar \
+    && mv n98-magerun2.phar /usr/local/bin/magerun
 
 RUN usermod -u 1000 www-data

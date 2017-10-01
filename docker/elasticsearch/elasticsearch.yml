@@ -1,2 +1,0 @@
-network.host: 0.0.0.0
-index.query.bool.max_clause_count: 4096

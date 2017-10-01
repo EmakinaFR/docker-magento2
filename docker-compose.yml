@@ -1,37 +1,32 @@
-version: "2.1"
+version: "3"
 
 services:
-  nginx:
-    image: nginx:latest
-    env_file: docker-env
-    depends_on:
-      - php
-    ports:
-      - "8080:80"
-    volumes:
-      - "./docker/nginx/nginx.conf:/etc/nginx/nginx.conf"
-      - "./docker/nginx/servers:/etc/nginx/conf.d"
-    volumes_from:
-      - php
-    tty: true
-
   php:
     build: php
     env_file: docker-env
     ports:
       - "9000:9000"
     volumes:
-      - "./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini"
-      - ~/www:/var/www/html
+      - "~/www:/var/www/html:delegated"
     tty: true
 
-  percona:
-    image: percona:latest
+  nginx:
+    build: nginx
+    env_file: docker-env
+    depends_on:
+      - php
+    ports:
+      - "8080:80"
+    volumes:
+      - "~/www:/var/www/html:delegated"
+    tty: true
+
+  mysql:
+    image: mariadb:latest
     env_file: docker-env
     ports:
       - "3306:3306"
     volumes:
-      - "./docker/percona/custom.cnf:/etc/mysql/conf.d/custom.cnf"
       - "mysql:/var/lib/mysql"
     tty: true
 
@@ -40,8 +35,6 @@ services:
     env_file: docker-env
     ports:
       - "9200:9200"
-    volumes:
-      - "./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
     tty: true
 
   redis:
@@ -56,12 +49,25 @@ services:
     env_file: docker-env
     depends_on:
       - nginx
-      - php
     ports:
       - "80:8080"
-    volumes:
-      - "./docker/varnish/default.vcl:/etc/varnish/default.vcl"
     tty: true
+
+  blackfire:
+    image: blackfire/blackfire
+    env_file: docker-env
+    depends_on:
+      - php
+    ports:
+      - "8707:8707"
+
+  maildev:
+    image: djfarrelly/maildev
+    env_file: docker-env
+    depends_on:
+      - php
+    ports:
+      - "1080:80"
 
 volumes:
   mysql: {}

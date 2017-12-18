@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 MAINTAINER Alexandre JARDIN <aja@emakina.fr>
 LABEL maintainer="Alexandre JARDIN <aja@emakina.fr>"
@@ -6,6 +6,8 @@ LABEL maintainer="Alexandre JARDIN <aja@emakina.fr>"
 # Install Varnish requirements
 RUN \
     apt-get update -qq && \
+    apt-get install -y --no-install-recommends curl && \
+    curl -s https://packagecloud.io/install/repositories/varnishcache/varnish5/script.deb.sh | bash && \
     apt-get install -y --no-install-recommends varnish && \
     rm -rf /var/lib/apt/lists/*
 

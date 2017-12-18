@@ -18,6 +18,7 @@ RUN \
         libxml2-dev \
         libxslt-dev \
         npm \
+        nodejs-legacy \
         ssmtp && \
     docker-php-ext-configure bcmath && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \

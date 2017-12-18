@@ -1,20 +1,14 @@
+# VCL version 5.0 is not supported so it should be 4.0 even though actually used Varnish version is 5
 vcl 4.0;
 
 import std;
-# The minimal Varnish version is 4.0
+# The minimal Varnish version is 5.0
 # For SSL offloading, pass the following header in your proxy server or load balancer: 'X-Forwarded-Proto: https'
 
 backend default {
     .host = "nginx";
     .port = "80";
     .first_byte_timeout = 600s;
-    .probe = {
-        .url = "/pub/health_check.php";
-        .timeout = 2s;
-        .interval = 5s;
-        .window = 10;
-        .threshold = 5;
-   }
 }
 
 acl purge {
@@ -127,7 +121,6 @@ sub vcl_hash {
     if (req.http.X-Forwarded-Proto) {
         hash_data(req.http.X-Forwarded-Proto);
     }
-    
 }
 
 sub vcl_backend_response {
@@ -142,6 +135,10 @@ sub vcl_backend_response {
         set beresp.do_gzip = true;
     }
 
+    if (beresp.http.X-Magento-Debug) {
+        set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
+    }
+
     # cache only successfully responses and 404s
     if (beresp.status != 200 && beresp.status != 404) {
         set beresp.ttl = 0s;
@@ -153,23 +150,23 @@ sub vcl_backend_response {
         return (deliver);
     }
 
-    if (beresp.http.X-Magento-Debug) {
-        set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
-    }
-
     # validate if we need to cache it and prevent from setting cookie
+    # images, css and js are cacheable by default so we have to remove cookie also
     if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
         unset beresp.http.set-cookie;
     }
 
    # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
    if (beresp.ttl <= 0s ||
-        beresp.http.Surrogate-control ~ "no-store" ||
-        (!beresp.http.Surrogate-Control && beresp.http.Vary == "*")) {
+       beresp.http.Surrogate-control ~ "no-store" ||
+       (!beresp.http.Surrogate-Control &&
+       beresp.http.Cache-Control ~ "no-cache|no-store") ||
+       beresp.http.Vary == "*") {
         # Mark as Hit-For-Pass for the next 2 minutes
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
     }
+
     return (deliver);
 }
 
@@ -183,6 +180,13 @@ sub vcl_deliver {
         }
     } else {
         unset resp.http.Age;
+    }
+
+    # Not letting browser to cache non-static files.
+    if (resp.http.Cache-Control !~ "private" && req.url !~ "^/(pub/)?(media|static)/") {
+        set resp.http.Pragma = "no-cache";
+        set resp.http.Expires = "-1";
+        set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
     }
 
     unset resp.http.X-Magento-Debug;
@@ -206,7 +210,7 @@ sub vcl_hit {
             return (deliver);
         } else {
             # Hit after TTL and grace expiration
-            return (fetch);
+            return (miss);
         }
     } else {
         # server is not healthy, retrieve from cache

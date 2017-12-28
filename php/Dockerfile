@@ -17,8 +17,6 @@ RUN \
         libpng-dev \
         libxml2-dev \
         libxslt-dev \
-        npm \
-        nodejs-legacy \
         ssmtp && \
     docker-php-ext-configure bcmath && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
@@ -34,6 +32,9 @@ RUN \
         zip && \
     perl -pi -e "s/mailhub=mail/mailhub=maildev/" /etc/ssmtp/ssmtp.conf && \
     usermod -u 1000 www-data && \
+    curl -sS https://deb.nodesource.com/setup_9.x | bash && \
+    apt-get install -y --no-install-recommends nodejs && \
+    npm install -g grunt-cli && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Blackfire extension
@@ -48,9 +49,9 @@ RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
 # Install Magerun globally
-RUN curl -O https://files.magerun.net/n98-magerun2.phar \
-    && chmod +x n98-magerun2.phar \
-    && mv n98-magerun2.phar /usr/local/bin/magerun
+RUN curl -O https://files.magerun.net/n98-magerun2.phar && \
+    chmod +x n98-magerun2.phar && \
+    mv n98-magerun2.phar /usr/local/bin/magerun
 
 # Install custom PHP configuration
 COPY custom.ini /usr/local/etc/php/conf.d/

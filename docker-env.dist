@@ -12,3 +12,7 @@ BLACKFIRE_SERVER_ID=
 BLACKFIRE_SERVER_TOKEN=
 BLACKFIRE_CLIENT_ID=
 BLACKFIRE_CLIENT_TOKEN=
+
+##### PHP
+PHP_IDE_CONFIG=serverName=
+XDEBUG_CONFIG=remote_host= idekey=PHPSTORM remote_port=9001 remote_enable=1 remote_connect_back=0

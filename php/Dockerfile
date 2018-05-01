@@ -44,6 +44,10 @@ RUN \
     tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp && \
     mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so
 
+# Install Xdebug
+RUN pecl install xdebug && \
+    docker-php-ext-enable xdebug
+
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer

@@ -11,4 +11,7 @@ blackfire.server_id=${BLACKFIRE_SERVER_ID}
 blackfire.server_token=${BLACKFIRE_SERVER_TOKEN}
 CONFIG
 
+mv "${PHP_INI_DIR}"/conf.d/blackfire.ini /home/blackfire.ini
+mv "${PHP_INI_DIR}"/conf.d/docker-php-ext-xdebug.ini /home/xdebug.ini
+
 exec "php-fpm"

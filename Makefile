@@ -63,6 +63,16 @@ go-mysql: ## Open a terminal in the "mysql" container
 go-php: ## Open a terminal in the "php" container
 	$(DOCKER_COMPOSE) exec php sh -c "/bin/bash"
 
+enable: ## Enable extension (blackfire or xdebug)
+	@read -p "Enter extension name: " ext; \
+	$(DOCKER_COMPOSE) exec php ln -s /home/$$ext.ini /usr/local/etc/php/conf.d/$$ext.ini
+	$(DOCKER_COMPOSE) up -d php
+
+disable: ## Disable extension (blackfire or xdebug)
+	@read -p "Enter extension name: " ext; \
+	$(DOCKER_COMPOSE) exec php unlink /usr/local/etc/php/conf.d/$$ext.ini
+	$(DOCKER_COMPOSE) up -d php
+
 ps: ## List all containers managed by the environment
 	$(DOCKER_COMPOSE) ps
 

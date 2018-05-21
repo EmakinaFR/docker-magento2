@@ -46,7 +46,8 @@ RUN \
 
 # Install Xdebug
 RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug
+    docker-php-ext-enable xdebug && \
+    mv "${PHP_INI_DIR}"/conf.d/docker-php-ext-xdebug.ini /home/xdebug.ini
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php && \

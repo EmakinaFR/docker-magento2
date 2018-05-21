@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cat << CONFIG > "${PHP_INI_DIR}"/conf.d/blackfire.ini
+cat << CONFIG > /home/blackfire.ini
 extension=blackfire.so
 blackfire.agent_socket=tcp://blackfire:${BLACKFIRE_PORT}
 blackfire.agent_timeout=5
@@ -10,8 +10,5 @@ blackfire.log_level=${BLACKFIRE_LOG_LEVEL}
 blackfire.server_id=${BLACKFIRE_SERVER_ID}
 blackfire.server_token=${BLACKFIRE_SERVER_TOKEN}
 CONFIG
-
-mv "${PHP_INI_DIR}"/conf.d/blackfire.ini /home/blackfire.ini
-mv "${PHP_INI_DIR}"/conf.d/docker-php-ext-xdebug.ini /home/xdebug.ini
 
 exec "php-fpm"

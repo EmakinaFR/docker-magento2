@@ -9,6 +9,7 @@ RUN \
     apt-get install -y --no-install-recommends \
         bzip2 \
         git \
+        gnupg \
         libcurl4-openssl-dev \
         libicu-dev \
         libfreetype6-dev \

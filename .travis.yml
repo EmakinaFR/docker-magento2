@@ -22,7 +22,7 @@ before_script:
   - sudo /etc/init.d/mysql stop
 
 script:
-  - cp docker-env.dist docker-env
+  - cp .env.dist .env
   - docker-compose up -d
   - docker images
   - docker ps

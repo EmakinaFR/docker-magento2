@@ -1,2 +1,4 @@
-docker-env
-nginx/servers/*.conf
+/nginx/servers/*
+!/nginx/servers/magento.conf
+!/nginx/servers/magento.conf.sample
+/.env

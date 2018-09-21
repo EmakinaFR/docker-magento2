@@ -1,8 +1,13 @@
-FROM nginx:latest
+FROM nginx:1.15-alpine
 
-MAINTAINER Alexandre JARDIN <aja@emakina.fr>
-LABEL maintainer="Alexandre JARDIN <aja@emakina.fr>"
+# Install HTTPS requirements
+RUN \
+    apk add --no-cache --virtual .build-deps \
+        openssl && \
+    mkdir -p /etc/nginx/ssl && \
+    openssl req -subj '/CN=localhost' -days 365 -x509 -newkey rsa:4096 -nodes \
+        -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt && \
+    apk del .build-deps
 
-# Install custom Nginx configuration
-COPY nginx.conf /etc/nginx/
-COPY servers/* /etc/nginx/conf.d/
+WORKDIR /var/www/html/
+COPY servers/magento.conf.sample /etc/nginx/conf.d/magento.conf.sample

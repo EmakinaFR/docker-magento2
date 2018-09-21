@@ -1,73 +1,68 @@
-version: "3"
+version: "3.4"
 
 services:
-  php:
-    build: php
-    env_file: docker-env
-    ports:
-      - "9000:9000"
+  blackfire:
+    image: blackfire/blackfire
+    env_file: .env
+    depends_on:
+      - php
+
+  elasticsearch:
+    build: elasticsearch
+    env_file: .env
     volumes:
-      - "~/www:/var/www/html:delegated"
+      - elasticsearch:/usr/share/elasticsearch/data
+
+  maildev:
+    image: djfarrelly/maildev
+    env_file: .env
+    depends_on:
+      - php
+    ports:
+      - 1080:80
+
+  mysql:
+    image: mysql:5.7
+    env_file: .env
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql:/var/lib/mysql
     tty: true
 
   nginx:
     build: nginx
-    env_file: docker-env
-    depends_on:
-      - php
+    env_file: .env
     ports:
-      - "8080:80"
+      - 443:443
     volumes:
-      - "~/www:/var/www/html:delegated"
+      - ~/www:/var/www/html:rw,delegated
+      # Custom configuration
+      - ./nginx/servers/magento.conf:/etc/nginx/conf.d/magento.conf:ro
+      - ./nginx/servers/custom.conf:/etc/nginx/conf.d/custom.conf:ro
     tty: true
 
-  mysql:
-    image: mariadb:latest
-    env_file: docker-env
-    ports:
-      - "3306:3306"
+  php:
+    build:
+      context: ./php
+      target: ${DOCKER_PHP_IMAGE}
+    env_file: .env
     volumes:
-      - "mysql:/var/lib/mysql"
-    tty: true
-
-  elasticsearch:
-    image: elasticsearch:2
-    env_file: docker-env
-    ports:
-      - "9200:9200"
+      - ~/www:/var/www/html:rw,delegated
+      # Custom configuration
+      - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
+      # SSH keys
+      - ~/.ssh:/root/.ssh:ro
     tty: true
 
   redis:
-    image: redis:latest
-    env_file: docker-env
-    ports:
-      - "6379:6379"
+    image: redis:3.2-alpine
+    env_file: .env
+    volumes:
+      - redis:/data
     tty: true
-
-  varnish:
-    build: varnish
-    env_file: docker-env
-    depends_on:
-      - nginx
-    ports:
-      - "80:8080"
-    tty: true
-
-  blackfire:
-    image: blackfire/blackfire
-    env_file: docker-env
-    depends_on:
-      - php
-    ports:
-      - "8707:8707"
-
-  maildev:
-    image: djfarrelly/maildev
-    env_file: docker-env
-    depends_on:
-      - php
-    ports:
-      - "1080:80"
 
 volumes:
+  elasticsearch: {}
   mysql: {}
+  redis: {}

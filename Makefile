@@ -1,10 +1,19 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 PHP_SERVICE := docker-compose exec php sh -c
 
+# Define a static project name that will be prepended to each service name
+export COMPOSE_PROJECT_NAME := magento2
+
 # This Makefile is designed to be extended by another Makefile located in your project directory.
 # ==> https://github.com/EmakinaFR/docker-magento2/wiki/Makefile
 
+# Create configuration files needed by the environment
+SETUP_ENV := $(shell (test -f $(SELF_DIR).env || cp $(SELF_DIR).env.dist $(SELF_DIR).env))
+SETUP_SERVER := $(shell (test -f $(SELF_DIR)nginx/servers/custom.conf || touch $(SELF_DIR)nginx/servers/custom.conf))
+
+# Extract environment variables needed by the environment
 export DOCKER_PHP_IMAGE := $(shell grep DOCKER_PHP_IMAGE $(SELF_DIR).env | awk -F '=' '{print $$NF}')
+export DOCKER_MOUNT_POINT := $(shell grep DOCKER_MOUNT_POINT $(SELF_DIR).env | awk -F '=' '{print $$NF}')
 
 ##
 ## ----------------------------------------------------------------------------
@@ -48,11 +57,9 @@ restore: ## Restore the "mysql" volume
 		--volumes-from $$(docker-compose ps -q mysql) \
 		-v $$(pwd):/backup \
 		busybox sh -c "tar xvf /backup/backup.tar var/lib/mysql/"
-	@make restart
+	docker-compose restart mysql
 
 start: ## Start the environment
-	-@test -f $(SELF_DIR).env || cp $(SELF_DIR).env.dist $(SELF_DIR).env
-	-@test -f $(SELF_DIR)nginx/servers/custom.conf || touch $(SELF_DIR)nginx/servers/custom.conf
 	docker-compose build
 	docker-compose up -d --remove-orphans
 

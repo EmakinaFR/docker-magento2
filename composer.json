@@ -1,0 +1,11 @@
+{
+  "name": "emakinafr/docker-magento2",
+  "description": "Docker environment that meets Magento 2 requirements",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alexandre Jardin",
+      "email": "aja@emakina.fr"
+    }
+  ]
+}

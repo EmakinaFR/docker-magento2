@@ -36,7 +36,7 @@ services:
     ports:
       - 443:443
     volumes:
-      - ~/www:/var/www/html:rw,delegated
+      - ${DOCKER_MOUNT_POINT}:/var/www/html:rw,delegated
       # Custom configuration
       - ./nginx/servers/magento.conf:/etc/nginx/conf.d/magento.conf:ro
       - ./nginx/servers/custom.conf:/etc/nginx/conf.d/custom.conf:ro
@@ -48,7 +48,7 @@ services:
       target: ${DOCKER_PHP_IMAGE}
     env_file: .env
     volumes:
-      - ~/www:/var/www/html:rw,delegated
+      - ${DOCKER_MOUNT_POINT}:/var/www/html:rw,delegated
       # Custom configuration
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH keys

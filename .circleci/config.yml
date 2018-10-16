@@ -1,0 +1,25 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: docker/compose:1.22.0
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Install required packages
+          command: 'apk add --no-cache git make openssh-client'
+      - checkout
+      - run:
+          name: Start the environment
+          command: 'make start'
+      - run:
+          name: List all containers managed by the environment
+          command: 'make ps'
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build

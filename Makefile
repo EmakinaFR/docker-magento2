@@ -21,6 +21,11 @@ export DOCKER_MOUNT_POINT := $(shell grep DOCKER_MOUNT_POINT $(SELF_DIR).env | a
 ## ----------------------------------------------------------------------------
 ##
 
+assets: ## Build theme assets from the "php" container
+	@read -p "Theme: " theme && \
+	$(PHP_SERVICE) "grunt exec:$$theme --base=$(PROJECT_PATH)" &&  \
+	$(PHP_SERVICE) "grunt less:$$theme --base=$(PROJECT_PATH)"
+
 backup: ## Backup the "mysql" volume
 	docker run --rm \
 		--volumes-from $$(docker-compose ps -q mysql) \
@@ -69,10 +74,16 @@ stats: ## Print real-time statistics about containers ressources usage
 stop: ## Stop the environment
 	docker-compose stop
 
+watch: ## Watch theme assets from the "php" container
+	@read -p "Theme: " theme && \
+	$(PHP_SERVICE) "grunt exec:$$theme --base=$(PROJECT_PATH) && \
+	$(PHP_SERVICE) "grunt less:$$theme --base=$(PROJECT_PATH) && \
+	$(PHP_SERVICE) "grunt watch:$$theme --base=$(PROJECT_PATH)"
+
 yarn: ## Install Composer dependencies from the "php" container
 	$(PHP_SERVICE) "yarn install --cwd=$(PROJECT_PATH)"
 
-.PHONY: backup build cache composer logs logs-full nginx php ps restore start stats stop yarn
+.PHONY: backup build cache composer logs logs-full nginx php ps restore start stats stop yarn assets watch
 
 .DEFAULT_GOAL := help
 help:

@@ -10,15 +10,8 @@ else
     exit 1
 fi
 
-# Copy only required files to the project directory
-mkdir -p "$1"/docker
-cp -r "${script_path}"/elasticsearch "$1"/docker/
-cp -r "${script_path}"/nginx "$1"/docker/
-cp -r "${script_path}"/php "$1"/docker/
-cp "${script_path}"/.dockerignore "$1"/docker/
-cp "${script_path}"/.env.dist "$1"/docker/
-cp "${script_path}"/docker-compose.yml "$1"/docker/
-cp "${script_path}"/Makefile "$1"/docker/
+# Copy environment files to the project directory
+cp -r "${script_path}" "$1"/docker
 
 # Install the Makefile in the project directory
 if [[ ! -f "$1"/Makefile ]]; then

@@ -2,22 +2,32 @@ version: 2
 
 jobs:
   build:
-    docker:
-      - image: docker/compose:1.22.0
+    machine:
+      image: circleci/classic:201808-01
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
-          name: Install required packages
-          command: 'apk add --no-cache git make openssh-client'
-      - checkout
+          name: Create a Magento Open Source project
+          command: |
+              ssh-keyscan github.com >> ~/.ssh/known_hosts
+              git clone git@github.com:magento/magento2.git ~/magento
+      - run:
+          name: Install the Composer dependencies
+          command: 'docker run --rm -it -v ~/magento:/app composer install --ignore-platform-reqs'
+      - run:
+          name: Install the Docker environment through Composer
+          command: 'docker run --rm -it -v ~/magento:/app composer require --dev emakinafr/docker-magento2:dev-${CIRCLE_BRANCH} --ignore-platform-reqs'
+      - run:
+          name: Execute the post-install process
+          command: 'docker run --rm -it -v ~/magento:/app composer exec docker-local-install -vvv'
+      - run:
+          name: Configure the environment variables
+          command: 'sudo cp ~/magento/docker/local/.env.dist ~/magento/docker/local/.env'
       - run:
           name: Start the environment
-          command: 'make start'
+          command: 'cd ~/magento && make start && make ps'
       - run:
-          name: List all containers managed by the environment
-          command: 'make ps'
-
+          name: Try to access the setup page of Magento 2
+          command: 'curl --insecure --location --resolve "www.magento.localhost:443:127.0.0.1" https://www.magento.localhost/'
 workflows:
   version: 2
   build:

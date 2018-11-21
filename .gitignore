@@ -1,4 +1,2 @@
-/nginx/servers/*
-!/nginx/servers/magento.conf
-!/nginx/servers/magento.conf.sample
-/.env
+/vendor/
+composer.lock

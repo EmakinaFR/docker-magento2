@@ -3,19 +3,19 @@ version: "3.4"
 services:
   blackfire:
     image: blackfire/blackfire
-    env_file: .env
+    env_file: ${PROJECT_LOCATION}/docker/local/.env
     depends_on:
       - php
 
   elasticsearch:
     build: elasticsearch
-    env_file: .env
+    env_file: ${PROJECT_LOCATION}/docker/local/.env
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
 
   maildev:
     image: djfarrelly/maildev
-    env_file: .env
+    env_file: ${PROJECT_LOCATION}/docker/local/.env
     depends_on:
       - php
     ports:
@@ -23,7 +23,7 @@ services:
 
   mysql:
     image: mysql:5.7
-    env_file: .env
+    env_file: ${PROJECT_LOCATION}/docker/local/.env
     ports:
       - 3306:3306
     volumes:
@@ -32,23 +32,22 @@ services:
 
   nginx:
     build: nginx
-    env_file: .env
+    env_file: ${PROJECT_LOCATION}/docker/local/.env
     ports:
       - 443:443
     volumes:
-      - ${DOCKER_MOUNT_POINT}:/var/www/html:rw,delegated
+      - ${PROJECT_LOCATION}:/var/www/html:rw,delegated
       # Custom configuration
-      - ./nginx/servers/magento.conf:/etc/nginx/conf.d/magento.conf:ro
-      - ./nginx/servers/custom.conf:/etc/nginx/conf.d/custom.conf:ro
+      - ${PROJECT_LOCATION}/docker/local/nginx.conf:/etc/nginx/conf.d/custom.conf:ro
     tty: true
 
   php:
     build:
       context: ./php
       target: ${DOCKER_PHP_IMAGE}
-    env_file: .env
+    env_file: ${PROJECT_LOCATION}/docker/local/.env
     volumes:
-      - ${DOCKER_MOUNT_POINT}:/var/www/html:rw,delegated
+      - ${PROJECT_LOCATION}:/var/www/html:rw,delegated
       # Custom configuration
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH keys
@@ -57,7 +56,7 @@ services:
 
   redis:
     image: redis:3.2-alpine
-    env_file: .env
+    env_file: ${PROJECT_LOCATION}/docker/local/.env
     volumes:
       - redis:/data
     tty: true

@@ -1,11 +1,18 @@
 {
-  "name": "emakinafr/docker-magento2",
-  "description": "Docker environment that meets Magento 2 requirements",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Alexandre Jardin",
-      "email": "aja@emakina.fr"
-    }
-  ]
+    "name": "emakinafr/docker-magento2",
+    "type": "library",
+    "description": "Docker environment that meets Magento 2 requirements",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexandre Jardin",
+            "email": "aja@emakina.fr"
+        }
+    ],
+    "require": {
+        "symfony/filesystem": "^3.0 || ^4.0"
+    },
+    "bin": [
+        "bin/docker-local-install"
+    ]
 }

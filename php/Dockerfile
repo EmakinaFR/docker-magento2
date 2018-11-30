@@ -1,4 +1,4 @@
-FROM php:7.1-fpm-alpine as magento2_php
+FROM php:7.2-fpm-alpine as magento2_php
 
 # Install Magento requirements
 RUN \
@@ -26,7 +26,6 @@ RUN \
         bcmath \
         intl \
         gd \
-        mcrypt \
         opcache \
         pdo_mysql \
         soap \

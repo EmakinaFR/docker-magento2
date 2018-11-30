@@ -11,7 +11,7 @@ This repository allows the creation of a Docker environment that meets
 * `maildev`: [djfarrelly/maildev:latest](https://hub.docker.com/r/djfarrelly/maildev/) image (emails debugging).
 * `mysql`: [mysql:5.7](https://store.docker.com/images/mysql) image (Magento database).
 * `nginx`: [nginx:1.15-alpine](https://github.com/EmakinaFR/docker-magento2/blob/master/nginx/Dockerfile) custom image with HTTPS (web server).
-* `php` : [php:7.1-fpm-alpine](https://github.com/EmakinaFR/docker-magento2/blob/master/php/Dockerfile) custom image with additional extensions and Composer.
+* `php` : [php:7.2-fpm-alpine](https://github.com/EmakinaFR/docker-magento2/blob/master/php/Dockerfile) custom image with additional extensions and Composer.
 * `redis`: [redis:4-alpine](https://store.docker.com/images/redis) image (Magento session and caches).
 
 ## Documentation

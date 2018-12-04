@@ -42,7 +42,9 @@ RUN \
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    composer global require "hirak/prestissimo:dev-master" --no-suggest --optimize-autoloader --classmap-authoritative
+    composer global require "hirak/prestissimo:dev-master" "n98/magerun2:dev-master" \
+        --no-suggest --optimize-autoloader --classmap-authoritative
+ENV PATH "${PATH}:/root/.composer/vendor/bin"
 
 # Install custom entrypoint
 COPY entrypoint.sh /usr/local/bin/docker-custom-entrypoint

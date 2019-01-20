@@ -36,7 +36,17 @@ services:
     ports:
       - 443:443
     volumes:
-      - ${PROJECT_LOCATION}:/var/www/html:rw,delegated
+      # Project files
+      - appcode:/var/www/html
+      - ${PROJECT_LOCATION}/app/code:/var/www/html/app/code:delegated
+      - ${PROJECT_LOCATION}/app/design:/var/www/html/app/design:delegated
+      - ${PROJECT_LOCATION}/app/etc:/var/www/html/app/etc:delegated
+      - ${PROJECT_LOCATION}/dev/tools/grunt/configs:/var/www/html/dev/tools/grunt/configs:delegated
+      - ${PROJECT_LOCATION}/pub/media:/var/www/html/pub/media
+      - ${PROJECT_LOCATION}/var/log:/var/www/html/var/log
+      - ${PROJECT_LOCATION}/composer.json:/var/www/html/composer.json:delegated
+      - ${PROJECT_LOCATION}/composer.lock:/var/www/html/composer.lock:delegated
+      - ${PROJECT_LOCATION}/yarn.lock:/var/www/html/yarn.lock
       # Custom configuration
       - ${PROJECT_LOCATION}/docker/local/nginx.conf:/etc/nginx/conf.d/custom.conf:ro
     tty: true
@@ -47,7 +57,17 @@ services:
       target: ${DOCKER_PHP_IMAGE}
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     volumes:
-      - ${PROJECT_LOCATION}:/var/www/html:rw,delegated
+      # Project files
+      - appcode:/var/www/html
+      - ${PROJECT_LOCATION}/app/code:/var/www/html/app/code:delegated
+      - ${PROJECT_LOCATION}/app/design:/var/www/html/app/design:delegated
+      - ${PROJECT_LOCATION}/app/etc:/var/www/html/app/etc:delegated
+      - ${PROJECT_LOCATION}/dev/tools/grunt/configs:/var/www/html/dev/tools/grunt/configs:delegated
+      - ${PROJECT_LOCATION}/pub/media:/var/www/html/pub/media
+      - ${PROJECT_LOCATION}/var/log:/var/www/html/var/log
+      - ${PROJECT_LOCATION}/composer.json:/var/www/html/composer.json:delegated
+      - ${PROJECT_LOCATION}/composer.lock:/var/www/html/composer.lock:delegated
+      - ${PROJECT_LOCATION}/yarn.lock:/var/www/html/yarn.lock
       # Custom configuration
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH keys
@@ -62,6 +82,7 @@ services:
     tty: true
 
 volumes:
+  appcode: {}
   elasticsearch: {}
   mysql: {}
   redis: {}

@@ -46,12 +46,24 @@ RUN \
         --no-suggest --optimize-autoloader --classmap-authoritative
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
 
+# Create directories where Magento will write
+RUN \
+    mkdir -p \
+        /var/www/html/generated \
+        /var/www/html/pub/media \
+        /var/www/html/pub/static \
+        /var/www/html/var/cache \
+        /var/www/html/var/page_cache \
+        /var/www/html/var/session \
+        /var/www/html/var/view_preprocessed \
+        /var/www/html/vendor && \
+    chown -R www-data:root /var/www/html
+
 # Install custom entrypoint
 COPY entrypoint.sh /usr/local/bin/docker-custom-entrypoint
 RUN chmod 777 /usr/local/bin/docker-custom-entrypoint
 CMD ["php-fpm"]
 ENTRYPOINT ["docker-custom-entrypoint"]
-
 
 # ======================================================================================================================
 FROM magento2_php as magento2_php_blackfire

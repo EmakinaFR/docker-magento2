@@ -44,6 +44,7 @@ copy-in: ## Copy project files in the "app" volume
 				--exclude=app/code/ \
 				--exclude=app/design/ \
 				--exclude=app/etc/ \
+				--exclude=m2-hotfixes/ \
 				--exclude=dev/ \
 				--exclude=generated/ \
 				--exclude=pub/media/ \

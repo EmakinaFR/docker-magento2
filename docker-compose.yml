@@ -42,6 +42,7 @@ services:
       - ${PROJECT_LOCATION}/app/design:/var/www/html/app/design:delegated
       - ${PROJECT_LOCATION}/app/etc:/var/www/html/app/etc:delegated
       - ${PROJECT_LOCATION}/dev/tools/grunt/configs:/var/www/html/dev/tools/grunt/configs:delegated
+      - ${PROJECT_LOCATION}/m2-hotfixes:/var/www/html/m2-hotfixes:delegated
       - ${PROJECT_LOCATION}/pub/media:/var/www/html/pub/media
       - ${PROJECT_LOCATION}/var/log:/var/www/html/var/log
       - ${PROJECT_LOCATION}/composer.json:/var/www/html/composer.json:delegated
@@ -63,6 +64,7 @@ services:
       - ${PROJECT_LOCATION}/app/design:/var/www/html/app/design:delegated
       - ${PROJECT_LOCATION}/app/etc:/var/www/html/app/etc:delegated
       - ${PROJECT_LOCATION}/dev/tools/grunt/configs:/var/www/html/dev/tools/grunt/configs:delegated
+      - ${PROJECT_LOCATION}/m2-hotfixes:/var/www/html/m2-hotfixes:delegated
       - ${PROJECT_LOCATION}/pub/media:/var/www/html/pub/media
       - ${PROJECT_LOCATION}/var/log:/var/www/html/var/log
       - ${PROJECT_LOCATION}/composer.json:/var/www/html/composer.json:delegated

@@ -23,7 +23,7 @@ backup: ## Backup the "mysql" volume
 		busybox sh -c "tar cvf /backup/backup.tar /var/lib/mysql"
 
 build: ## Build the environment
-	docker-compose build
+	docker-compose build --pull
 
 cache: ## Flush cache stored in Redis
 	docker-compose exec redis sh -c "redis-cli -n 1 FLUSHDB"
@@ -99,7 +99,6 @@ restore: ## Restore the "mysql" volume
 	docker-compose restart mysql
 
 start: ## Start the environment
-	docker-compose build
 	docker-compose up -d --remove-orphans
 
 stats: ## Print real-time statistics about containers ressources usage

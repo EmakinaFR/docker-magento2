@@ -24,7 +24,7 @@ jobs:
           command: 'sudo cp ~/magento/docker/local/.env.dist ~/magento/docker/local/.env'
       - run:
           name: Start the environment
-          command: 'cd ~/magento && make start && make ps'
+          command: 'cd ~/magento && make build start ps'
       - run:
           name: Try to access the setup page of Magento 2
           command: 'curl --insecure --location --resolve "www.magento.localhost:443:127.0.0.1" https://www.magento.localhost/'

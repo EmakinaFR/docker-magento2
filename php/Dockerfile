@@ -3,7 +3,10 @@ FROM php:7.2-fpm-alpine as magento2_php
 # Install Magento requirements
 RUN \
     apk add --no-cache --virtual .persistent-deps \
+        autoconf \
+        automake \
         freetype-dev \
+        g++ \
         git \
         icu-libs \
         libjpeg-turbo-dev \
@@ -12,6 +15,7 @@ RUN \
         libxml2-dev \
         libxml2-utils \
         libxslt-dev \
+        make \
         openssh-client \
         patch \
         perl \

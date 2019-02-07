@@ -40,19 +40,19 @@ copy-in: ## Copy project files in the "app" volume
 		sh -c "\
 			apk add --no-cache rsync && \
 			rsync -avh --delete --progress --no-perms --stats \
-				--exclude=.git/ \
-				--exclude=app/code/ \
-				--exclude=app/design/ \
-				--exclude=app/etc/ \
-				--exclude=m2-hotfixes/ \
-				--exclude=dev/ \
-				--exclude=generated/ \
-				--exclude=pub/media/ \
-				--exclude=pub/static/ \
-				--exclude=var/ \
-				--exclude=composer.json \
-				--exclude=composer.lock \
-				--exclude=yarn.lock \
+				--exclude=./.git/ \
+				--exclude=./app/code/ \
+				--exclude=./app/design/ \
+				--exclude=./app/etc/ \
+				--exclude=./dev/ \
+				--exclude=./generated/ \
+				--exclude=./m2-hotfixes/ \
+				--exclude=./pub/media/ \
+				--exclude=./pub/static/ \
+				--exclude=./var/ \
+				--exclude=./composer.json \
+				--exclude=./composer.lock \
+				--exclude=./yarn.lock \
 				/project/ /var/www/html/ \
 		"
 	docker-compose exec php sh -c "chown -R www-data:root /var/www/html"

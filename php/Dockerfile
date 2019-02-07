@@ -63,6 +63,9 @@ RUN \
         /var/www/html/vendor && \
     chown -R www-data:root /var/www/html
 
+# Automatically start the SSH agent when a new session is created
+RUN echo 'eval $(ssh-agent) && ssh-add' >> /home/www-data/.profile
+
 # Install custom entrypoint
 COPY entrypoint.sh /usr/local/bin/docker-custom-entrypoint
 RUN chmod 777 /usr/local/bin/docker-custom-entrypoint

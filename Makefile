@@ -84,7 +84,7 @@ nginx: ## Open a terminal in the "nginx" container
 	docker-compose exec nginx sh
 
 php: ## Open a terminal in the "php" container
-	docker-compose exec -u www-data:root php sh
+	docker-compose exec -u www-data:root php sh -l
 
 ps: ## List all containers managed by the environment
 	docker-compose ps

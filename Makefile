@@ -98,6 +98,13 @@ restore: ## Restore the "mysql" volume
 		busybox sh -c "tar xvf /backup/backup.tar var/lib/mysql/"
 	docker-compose restart mysql
 
+root: ## Display the commands to set up the environment for an advanced usage
+	@echo "export COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}"
+	@echo "export COMPOSE_FILE=${COMPOSE_FILE}"
+	@echo "export PROJECT_LOCATION=${PROJECT_LOCATION}"
+	@echo "export DOCKER_PHP_IMAGE=${DOCKER_PHP_IMAGE}"
+	@echo "\n# Run this command to configure your shell:\n# eval \$$(make root)"
+
 start: ## Start the environment
 	docker-compose up -d --remove-orphans
 

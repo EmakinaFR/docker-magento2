@@ -73,7 +73,7 @@ services:
       # Custom configuration
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH keys
-      - ~/.ssh:/root/.ssh:ro
+      - ~/.ssh:/home/www-data/.ssh:ro
     tty: true
 
   redis:

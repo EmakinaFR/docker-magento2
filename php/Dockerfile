@@ -2,7 +2,7 @@ FROM php:7.2-fpm-alpine as magento2_php
 
 # Install Magento requirements
 RUN \
-    apk add --no-cache .persistent-deps \
+    apk add --no-cache \
         autoconf \
         automake \
         freetype-dev \
@@ -21,6 +21,7 @@ RUN \
         openssh-client \
         patch \
         perl \
+        shadow \
         ssmtp \
         yarn && \
     apk add --no-cache --virtual .build-deps $PHPIZE_DEPS && \
@@ -54,21 +55,11 @@ RUN \
         --no-suggest --optimize-autoloader --classmap-authoritative
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
 
-# Create directories where Magento will write
-RUN \
-    mkdir -p \
-        /var/www/html/generated \
-        /var/www/html/pub/media \
-        /var/www/html/pub/static \
-        /var/www/html/var/cache \
-        /var/www/html/var/page_cache \
-        /var/www/html/var/session \
-        /var/www/html/var/view_preprocessed \
-        /var/www/html/vendor && \
-    chown -R www-data:root /var/www/html
-
 # Automatically start the SSH agent when a new session is created
 RUN echo 'eval $(ssh-agent) && ssh-add' >> /home/www-data/.profile
+
+# Assign a new UID to avoid using a generated value with docker-sync
+RUN usermod -u 1000 www-data
 
 # Install custom entrypoint
 COPY entrypoint.sh /usr/local/bin/docker-custom-entrypoint

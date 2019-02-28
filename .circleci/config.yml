@@ -6,6 +6,9 @@ jobs:
       image: circleci/classic:201808-01
     steps:
       - run:
+          name: Install system requirements
+          command: 'gem install docker-sync'
+      - run:
           name: Create a Magento Open Source project
           command: |
               ssh-keyscan github.com >> ~/.ssh/known_hosts

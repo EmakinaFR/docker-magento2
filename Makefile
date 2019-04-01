@@ -42,17 +42,17 @@ mysql: ## Open a terminal in the "mysql" container
 	docker-compose exec mysql sh
 
 nginx: ## Open a terminal in the "nginx" container
-	docker-compose exec nginx sh
+	docker-compose exec -u nginx:nginx nginx sh -l
 
 php: ## Open a terminal in the "php" container
-	docker-compose exec -u www-data:root php sh -l
+	docker-compose exec -u www-data:www-data php sh -l
 
 ps: ## List all containers managed by the environment
 	docker-compose ps
 
 purge: ## Purge all services and associated volumes
 	docker-compose down -v
-	docker-sync clean --config="$(DOCKER_PATH)/docker-sync.yml"
+	mutagen terminate --all
 
 restart: stop start ## Restart the environment
 
@@ -71,15 +71,20 @@ root: ## Display the commands to set up the environment for an advanced usage
 	@echo "\n# Run this command to configure your shell:\n# eval \$$(make root)"
 
 start: ## Start the environment
-	docker-sync start --config="$(DOCKER_PATH)/docker-sync.yml" --dir="${HOME}/.docker-sync"
 	docker-compose up -d --remove-orphans
+	mutagen create \
+		--default-owner-beta="id:1000" \
+		--default-group-beta="id:1000" \
+		--sync-mode="two-way-resolved" \
+		--ignore-vcs --ignore=".idea" \
+		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"
 
 stats: ## Print real-time statistics about containers ressources usage
 	docker stats $(docker ps --format={{.Names}})
 
 stop: ## Stop the environment
 	docker-compose stop
-	docker-sync stop --config="$(DOCKER_PATH)/docker-sync.yml" --dir="${HOME}/.docker-sync"
+	mutagen terminate --all
 
 yarn: ## Install Composer dependencies from the "php" container
 	$(PHP_SERVICE) "yarn install --cwd=/var/www/html"

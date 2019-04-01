@@ -37,7 +37,7 @@ services:
       - 443:443
     volumes:
       # Project files
-      - app-magento2-sync:/var/www/html:nocopy
+      - code_sync:/var/www/html:nocopy
       # Custom configuration
       - ${PROJECT_LOCATION}/docker/local/nginx.conf:/etc/nginx/conf.d/custom.conf:ro
     tty: true
@@ -49,7 +49,7 @@ services:
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     volumes:
       # Project files
-      - app-magento2-sync:/var/www/html:nocopy
+      - code_sync:/var/www/html:nocopy
       # Custom configuration
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH keys
@@ -63,9 +63,14 @@ services:
       - redis:/data
     tty: true
 
+  synchro:
+    build: synchro
+    container_name: ${COMPOSE_PROJECT_NAME}_synchro
+    volumes:
+      - code_sync:/var/www/html:nocopy
+
 volumes:
-  app-magento2-sync:
-    external: true
+  code_sync: {}
   elasticsearch: {}
   mysql: {}
   redis: {}

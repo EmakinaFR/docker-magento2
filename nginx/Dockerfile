@@ -9,8 +9,10 @@ RUN \
         -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt && \
     apk del .build-deps
 
-# Assign a new UID to avoid using a generated value with docker-sync
-RUN usermod -u 1000 nginx
+# Assign a new UID/GID to avoid using a generated value
+RUN \
+    usermod -u 1000 nginx && \
+    groupmod -g 1000 nginx
 
 WORKDIR /var/www/html/
 COPY servers/magento.conf.sample /etc/nginx/conf.d/magento.conf.sample

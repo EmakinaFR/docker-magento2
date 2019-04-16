@@ -58,8 +58,10 @@ ENV PATH "${PATH}:/root/.composer/vendor/bin"
 # Automatically start the SSH agent when a new session is created
 RUN echo 'eval $(ssh-agent) && ssh-add' >> /home/www-data/.profile
 
-# Assign a new UID to avoid using a generated value with docker-sync
-RUN usermod -u 1000 www-data
+# Assign a new UID/GID to avoid using a generated value
+RUN \
+    usermod -u 1000 www-data && \
+    groupmod -g 1000 www-data
 
 # Install custom entrypoint
 COPY entrypoint.sh /usr/local/bin/docker-custom-entrypoint

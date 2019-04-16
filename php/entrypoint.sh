@@ -12,4 +12,7 @@ blackfire.server_token=${BLACKFIRE_SERVER_TOKEN}
 CONFIG
 fi
 
+# Ensure that the document root is writable by the "www-data" user
+chown www-data:www-data /var/www/html
+
 exec "$@"

@@ -7,7 +7,11 @@ jobs:
     steps:
       - run:
           name: Install system requirements
-          command: 'gem install docker-sync'
+          command: |
+              wget -qO- "https://github.com/havoc-io/mutagen/releases/download/$MUTAGEN_ARCHIVE" | tar xvz -C "$HOME/bin/"
+              mutagen daemon start
+          environment:
+            MUTAGEN_ARCHIVE: v0.8.0/mutagen_linux_amd64_v0.8.0.tar.gz
       - run:
           name: Create a Magento Open Source project
           command: |
@@ -15,10 +19,10 @@ jobs:
               git clone git@github.com:magento/magento2.git ~/magento
       - run:
           name: Install the Composer dependencies
-          command: 'docker run --rm -it -v ~/magento:/app composer install --ignore-platform-reqs'
+          command: 'docker run --rm -it -v ~/magento:/app composer install --no-progress --ignore-platform-reqs'
       - run:
           name: Install the Docker environment through Composer
-          command: 'docker run --rm -it -v ~/magento:/app composer require --dev emakinafr/docker-magento2:dev-${CIRCLE_BRANCH} --ignore-platform-reqs'
+          command: 'docker run --rm -it -v ~/magento:/app composer require emakinafr/docker-magento2:dev-${CIRCLE_BRANCH} --dev --no-progress --ignore-platform-reqs'
       - run:
           name: Execute the post-install process
           command: 'docker run --rm -it -v ~/magento:/app composer exec docker-local-install -vvv'

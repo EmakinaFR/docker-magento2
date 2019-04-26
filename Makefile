@@ -3,8 +3,8 @@
 
 PHP_SERVICE := docker-compose exec php sh -c
 
-# Define a static project name that will be prepended to each service name
-export COMPOSE_PROJECT_NAME := magento2
+# Define a dynamic project name that will be prepended to each service name
+export COMPOSE_PROJECT_NAME := magento2_$(shell echo $${PWD\#\#*/})
 
 # Extract environment variables needed by the environment
 export PROJECT_LOCATION := $(shell echo ${MAKEFILE_DIRECTORY})

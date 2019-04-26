@@ -78,6 +78,10 @@ start: ## Start the environment
 		--sync-mode="two-way-resolved" \
 		--ignore-vcs --ignore=".idea" \
 		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"
+	while [[ ! $$(mutagen list) =~ 'Status: Watching for changes' ]]; do \
+		echo 'Waiting for synchronization to complete...'; \
+		sleep 10; \
+	done
 
 stats: ## Print real-time statistics about containers ressources usage
 	docker stats $(docker ps --format={{.Names}})

@@ -34,7 +34,12 @@ jobs:
           command: 'cd ~/magento && make build start ps'
       - run:
           name: Try to access the setup page of Magento 2
-          command: 'curl --insecure --location --resolve "www.magento.localhost:443:127.0.0.1" https://www.magento.localhost/'
+          command: |
+              while [[ ! $(mutagen list) =~ 'Status: Watching for changes' ]]; do
+                echo 'Waiting for synchronization to complete...'
+                sleep 10
+              done
+              curl --insecure --location --resolve "www.magento.localhost:443:127.0.0.1" https://www.magento.localhost/setup/
 workflows:
   version: 2
   build:

@@ -1,6 +1,7 @@
 # This Makefile is designed to be included by another Makefile located in your project directory.
 # ==> https://github.com/EmakinaFR/docker-magento2/wiki/Makefile
 
+SHELL := /bin/bash
 PHP_SERVICE := docker-compose exec php sh -c
 
 # Define a dynamic project name that will be prepended to each service name
@@ -50,9 +51,9 @@ php: ## Open a terminal in the "php" container
 ps: ## List all containers managed by the environment
 	docker-compose ps
 
-purge: ## Purge all services and associated volumes
-	docker-compose down -v
-	mutagen terminate --all
+purge: ## Purge all services, associated volumes and the Mutagen session
+	docker-compose down --volumes
+	mutagen terminate --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
 restart: stop start ## Restart the environment
 
@@ -71,14 +72,21 @@ root: ## Display the commands to set up the environment for an advanced usage
 	@echo "\n# Run this command to configure your shell:\n# eval \$$(make root)"
 
 start: ## Start the environment
-	docker-compose up -d --remove-orphans
-	mutagen create \
-		--default-owner-beta="id:1000" \
-		--default-group-beta="id:1000" \
-		--sync-mode="two-way-resolved" \
-		--ignore-vcs --ignore=".idea" \
-		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"
-	while [[ ! $$(mutagen list) =~ 'Status: Watching for changes' ]]; do \
+	@docker-compose up --detach --remove-orphans
+
+	@if [[ -z "$(shell mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" ]]; then \
+		mutagen create \
+			--label=name="${COMPOSE_PROJECT_NAME}" \
+			--default-owner-beta="id:1000" \
+			--default-group-beta="id:1000" \
+			--sync-mode="two-way-resolved" \
+			--ignore-vcs --ignore=".idea" \
+		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"; \
+	else \
+		mutagen resume --label-selector='name==${COMPOSE_PROJECT_NAME}'; \
+	fi
+
+	@while [[ ! $$(mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}') =~ 'Status: Watching for changes' ]]; do \
 		echo 'Waiting for synchronization to complete...'; \
 		sleep 10; \
 	done
@@ -87,8 +95,8 @@ stats: ## Print real-time statistics about containers ressources usage
 	docker stats $(docker ps --format={{.Names}})
 
 stop: ## Stop the environment
-	docker-compose stop
-	mutagen terminate --all
+	@docker-compose stop
+	@mutagen pause --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
 yarn: ## Install Composer dependencies from the "php" container
 	$(PHP_SERVICE) "yarn install --cwd=/var/www/html"

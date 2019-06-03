@@ -51,9 +51,13 @@ RUN \
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    composer global require "hirak/prestissimo:dev-master" "n98/magerun2:dev-master" \
-        --no-suggest --optimize-autoloader --classmap-authoritative
+    composer global require "hirak/prestissimo" --no-suggest --optimize-autoloader --classmap-authoritative
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
+
+# Install netz98/n98-magerun2
+RUN \
+    curl -sS https://files.magerun.net/n98-magerun2.phar --output /usr/local/bin/magerun2 && \
+    chmod +x /usr/local/bin/magerun2
 
 # Automatically start the SSH agent when a new session is created
 RUN echo 'eval $(ssh-agent) && ssh-add' >> /home/www-data/.profile

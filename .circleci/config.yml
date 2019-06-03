@@ -11,7 +11,7 @@ jobs:
               wget -qO- "https://github.com/havoc-io/mutagen/releases/download/$MUTAGEN_ARCHIVE" | tar xvz -C "$HOME/bin/"
               mutagen daemon start
           environment:
-            MUTAGEN_ARCHIVE: v0.8.0/mutagen_linux_amd64_v0.8.0.tar.gz
+            MUTAGEN_ARCHIVE: v0.9.0/mutagen_linux_amd64_v0.9.0.tar.gz
       - run:
           name: Create a Magento Open Source project
           command: |

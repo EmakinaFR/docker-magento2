@@ -30,4 +30,4 @@ $filesystem->copy(SOURCE_DIRECTORY . '/nginx.conf.sample', TARGET_DIRECTORY . '/
 /**
  * Copy the default Makefile at the project root
  */
-$filesystem->copy(SOURCE_DIRECTORY . '/Makefile.sample', 'Makefile');
+$filesystem->copy(SOURCE_DIRECTORY . '/Makefile.sample', 'Makefile', true);

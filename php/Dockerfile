@@ -38,6 +38,7 @@ RUN \
         opcache \
         pdo_mysql \
         soap \
+        sockets \
         xsl \
         zip && \
     yes "" | pecl install apcu redis && \

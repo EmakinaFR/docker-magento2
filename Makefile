@@ -80,7 +80,7 @@ start: ## Start the environment
 			--default-owner-beta="id:1000" \
 			--default-group-beta="id:1000" \
 			--sync-mode="two-way-resolved" \
-			--ignore-vcs --ignore=".idea" \
+			--ignore-vcs --ignore=".idea" --ignore="pub/static" \
 		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"; \
 	else \
 		mutagen resume --label-selector='name==${COMPOSE_PROJECT_NAME}'; \

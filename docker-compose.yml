@@ -22,7 +22,7 @@ services:
       - 1080:80
 
   mysql:
-    image: mysql:5.7
+    build: mysql
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     ports:
       - 3306:3306

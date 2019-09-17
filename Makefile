@@ -74,7 +74,7 @@ root: ## Display the commands to set up the environment for an advanced usage
 start: ## Start the environment
 	@docker-compose up --detach --remove-orphans
 
-	@if [[ -z "$(shell mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" ]]; then \
+	@if [[ "$(shell mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "No sessions found" ]]; then \
 		mutagen create \
 			--label=name="${COMPOSE_PROJECT_NAME}" \
 			--default-owner-beta="id:1000" \

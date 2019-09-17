@@ -52,6 +52,7 @@ RUN \
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    composer config --global repos.packagist composer https://repo.packagist.org && \
     composer global require "hirak/prestissimo" --no-suggest --optimize-autoloader --classmap-authoritative
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
 

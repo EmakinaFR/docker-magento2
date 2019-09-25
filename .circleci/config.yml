@@ -11,7 +11,7 @@ jobs:
               wget -qO- "https://github.com/havoc-io/mutagen/releases/download/$MUTAGEN_ARCHIVE" | tar xvz -C "$HOME/bin/"
               mutagen daemon start
           environment:
-            MUTAGEN_ARCHIVE: v0.9.0/mutagen_linux_amd64_v0.9.0.tar.gz
+            MUTAGEN_ARCHIVE: v0.10.0/mutagen_linux_amd64_v0.10.0.tar.gz
       - run:
           name: Create a Magento Open Source project
           command: |
@@ -34,12 +34,7 @@ jobs:
           command: 'cd ~/magento && make build start ps'
       - run:
           name: Try to access the setup page of Magento 2
-          command: |
-              while [[ ! $(mutagen list) =~ 'Status: Watching for changes' ]]; do
-                echo 'Waiting for synchronization to complete...'
-                sleep 10
-              done
-              curl --insecure --location --resolve "www.magento.localhost:443:127.0.0.1" https://www.magento.localhost/setup/
+          command: 'curl --insecure --location --resolve "www.magento.localhost:443:127.0.0.1" https://www.magento.localhost/setup/'
 workflows:
   version: 2
   build:

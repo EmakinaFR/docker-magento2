@@ -69,12 +69,14 @@ root: ## Display the commands to set up the environment for an advanced usage
 	@echo "export COMPOSE_FILE=${COMPOSE_FILE}"
 	@echo "export PROJECT_LOCATION=${PROJECT_LOCATION}"
 	@echo "export DOCKER_PHP_IMAGE=${DOCKER_PHP_IMAGE}"
-	@echo "\n# Run this command to configure your shell:\n# eval \$$(make root)"
+	@echo ""
+	@echo "# Run this command to configure your shell:"
+	@echo "# eval \$$(make root)"
 
 start: ## Start the environment
 	@docker-compose up --detach --remove-orphans
 
-	@if [[ "$(shell mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "No sessions found" ]]; then \
+	@if [[ "$$(mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "No sessions found" ]]; then \
 		mutagen create \
 			--label=name="${COMPOSE_PROJECT_NAME}" \
 			--default-owner-beta="id:1000" \
@@ -86,8 +88,8 @@ start: ## Start the environment
 		mutagen resume --label-selector='name==${COMPOSE_PROJECT_NAME}'; \
 	fi
 
-	@while [[ ! $$(mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}') =~ 'Status: Watching for changes' ]]; do \
-		echo 'Waiting for synchronization to complete...'; \
+	@while [[ ! "$$(mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "Status: Watching for changes" ]]; do \
+		echo "Waiting for synchronization to complete..."; \
 		sleep 10; \
 	done
 

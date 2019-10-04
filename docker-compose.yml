@@ -37,7 +37,11 @@ services:
       - 443:443
     volumes:
       # Project files
-      - code_sync:/var/www/html:nocopy
+      - ${PROJECT_LOCATION}:/var/www/html:cached
+      - app_generated:/var/www/html/generated
+      - app_nodemodules:/var/www/html/node_modules
+      - app_pubstatic:/var/www/html/pub/static
+      - app_vendor:/var/www/html/vendor
       # Custom configuration
       - ${PROJECT_LOCATION}/docker/local/nginx.conf:/etc/nginx/conf.d/custom.conf:ro
     tty: true
@@ -49,7 +53,11 @@ services:
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     volumes:
       # Project files
-      - code_sync:/var/www/html:nocopy
+      - ${PROJECT_LOCATION}:/var/www/html:cached
+      - app_generated:/var/www/html/generated
+      - app_nodemodules:/var/www/html/node_modules
+      - app_pubstatic:/var/www/html/pub/static
+      - app_vendor:/var/www/html/vendor
       # Custom configuration
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH keys
@@ -63,14 +71,11 @@ services:
       - redis:/data
     tty: true
 
-  synchro:
-    build: synchro
-    container_name: ${COMPOSE_PROJECT_NAME}_synchro
-    volumes:
-      - code_sync:/var/www/html:nocopy
-
 volumes:
-  code_sync: {}
+  app_generated: {}
+  app_nodemodules: {}
+  app_pubstatic: {}
+  app_vendor: {}
   elasticsearch: {}
   mysql: {}
   redis: {}

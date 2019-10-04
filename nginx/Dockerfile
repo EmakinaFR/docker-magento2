@@ -9,10 +9,12 @@ RUN \
         -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt && \
     apk del .build-deps
 
-# Assign a new UID/GID to avoid using a generated value
+# Prepare the directories excluded from the bind-mount
 RUN \
     usermod -u 1000 nginx && \
-    groupmod -g 1000 nginx
+    groupmod -g 1000 nginx && \
+    mkdir -p /var/www/html/generated /var/www/html/node_modules /var/www/html/pub/static /var/www/html/vendor && \
+    chown -R nginx:nginx /var/www/html/generated /var/www/html/node_modules /var/www/html/pub/static /var/www/html/vendor
 
 WORKDIR /var/www/html/
 COPY servers/magento.conf.sample /etc/nginx/conf.d/magento.conf.sample

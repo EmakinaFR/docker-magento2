@@ -51,9 +51,8 @@ php: ## Open a terminal in the "php" container
 ps: ## List all containers managed by the environment
 	docker-compose ps
 
-purge: ## Purge all services, associated volumes and the Mutagen session
+purge: ## Purge all services and the associated volumes
 	docker-compose down --volumes
-	mutagen terminate --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
 restart: stop start ## Restart the environment
 
@@ -76,29 +75,11 @@ root: ## Display the commands to set up the environment for an advanced usage
 start: ## Start the environment
 	@docker-compose up --detach --remove-orphans
 
-	@if [[ "$$(mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "No sessions found" ]]; then \
-		mutagen create \
-			--label=name="${COMPOSE_PROJECT_NAME}" \
-			--default-owner-beta="id:1000" \
-			--default-group-beta="id:1000" \
-			--sync-mode="two-way-resolved" \
-			--ignore-vcs --ignore=".idea" --ignore="pub/static" \
-		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"; \
-	else \
-		mutagen resume --label-selector='name==${COMPOSE_PROJECT_NAME}'; \
-	fi
-
-	@while [[ ! "$$(mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "Status: Watching for changes" ]]; do \
-		echo "Waiting for synchronization to complete..."; \
-		sleep 10; \
-	done
-
 stats: ## Print real-time statistics about containers ressources usage
 	docker stats $(docker ps --format={{.Names}})
 
 stop: ## Stop the environment
 	@docker-compose stop
-	@mutagen pause --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
 yarn: ## Install Composer dependencies from the "php" container
 	$(PHP_SERVICE) "yarn install --cwd=/var/www/html"

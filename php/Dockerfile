@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine as magento2_php
+FROM php:7.3-fpm-alpine as magento2_php
 
 # Install Magento requirements
 RUN \
@@ -17,6 +17,7 @@ RUN \
         libxml2-utils \
         libxslt-dev \
         libwebp-dev \
+        libzip-dev \
         make \
         openssh-client \
         patch \
@@ -78,7 +79,7 @@ ENTRYPOINT ["docker-custom-entrypoint"]
 # ======================================================================================================================
 FROM magento2_php as magento2_php_blackfire
 RUN \
-    curl -sS https://packages.blackfire.io/binaries/blackfire-php/1.23.1/blackfire-php-alpine_amd64-php-72.so \
+    curl -sS https://packages.blackfire.io/binaries/blackfire-php/1.27.1/blackfire-php-alpine_amd64-php-73.so \
         --output $(php -r "echo ini_get('extension_dir');")/blackfire.so && \
     docker-php-ext-enable blackfire
 # ======================================================================================================================

@@ -2,7 +2,7 @@
 # ==> https://github.com/EmakinaFR/docker-magento2/wiki/Makefile
 
 SHELL := /bin/bash
-PHP_SERVICE := docker-compose exec php sh -c
+PHP_SERVICE := docker-compose exec -u www-data:www-data php sh -c
 
 # Define a dynamic project name that will be prepended to each service name
 export COMPOSE_PROJECT_NAME := magento2_$(shell echo $${PWD\#\#*/} | tr '[:upper:]' '[:lower:]')

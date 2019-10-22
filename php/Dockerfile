@@ -2,6 +2,7 @@ FROM php:7.3-fpm-alpine as magento2_php
 
 # Install Magento requirements
 RUN \
+    apk update && \
     apk add --no-cache \
         autoconf \
         automake \
@@ -62,13 +63,15 @@ RUN \
     curl -sS https://files.magerun.net/n98-magerun2.phar --output /usr/local/bin/magerun2 && \
     chmod +x /usr/local/bin/magerun2
 
-# Automatically start the SSH agent when a new session is created
-RUN echo 'eval $(ssh-agent) && ssh-add' >> /home/www-data/.profile
-
 # Assign a new UID/GID to avoid using a generated value
 RUN \
     usermod -u 1000 www-data && \
     groupmod -g 1000 www-data
+
+# Allow "www-data" to use the shared SSH agent
+RUN \
+    mkdir -p /run/host-services/ && \
+    chown www-data:www-data /run/host-services/
 
 # Install custom entrypoint
 COPY entrypoint.sh /usr/local/bin/docker-custom-entrypoint

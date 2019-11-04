@@ -85,6 +85,13 @@ RUN \
     curl -sS https://packages.blackfire.io/binaries/blackfire-php/1.27.1/blackfire-php-alpine_amd64-php-73.so \
         --output $(php -r "echo ini_get('extension_dir');")/blackfire.so && \
     docker-php-ext-enable blackfire
+
+# Install agent in order to profile in CLI
+RUN \
+    mkdir -p /tmp/blackfire \
+    && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
+    && rm -Rf /tmp/blackfire
 # ======================================================================================================================
 
 # ======================================================================================================================

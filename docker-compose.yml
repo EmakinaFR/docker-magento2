@@ -8,7 +8,7 @@ services:
       - php
 
   elasticsearch:
-    build: elasticsearch
+    image: ajardin/magento2-elasticsearch:latest
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
@@ -31,7 +31,7 @@ services:
     tty: true
 
   nginx:
-    build: nginx
+    image: ajardin/magento2-nginx:latest
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     ports:
       - 443:443
@@ -43,9 +43,7 @@ services:
     tty: true
 
   php:
-    build:
-      context: ./php
-      target: ${DOCKER_PHP_IMAGE}
+    image: ajardin/magento2-php:${DOCKER_PHP_IMAGE}
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     environment:
       - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
@@ -66,7 +64,7 @@ services:
     tty: true
 
   synchro:
-    build: synchro
+    image: ajardin/synchro:latest
     container_name: ${COMPOSE_PROJECT_NAME}_synchro
     volumes:
       - code_sync:/var/www/html:nocopy

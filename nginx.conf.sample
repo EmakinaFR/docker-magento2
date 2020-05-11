@@ -8,8 +8,8 @@ server {
     server_name magento.localhost;
 
     ssl on;
-    ssl_certificate /etc/nginx/ssl/server.crt;
-    ssl_certificate_key /etc/nginx/ssl/server.key;
+    ssl_certificate /etc/nginx/ssl/custom.pem;
+    ssl_certificate_key /etc/nginx/ssl/custom.key;
 
     set $MAGE_ROOT /var/www/html;
     set $MAGE_MODE developer;

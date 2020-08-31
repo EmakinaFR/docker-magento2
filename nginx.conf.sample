@@ -14,5 +14,8 @@ server {
     set $MAGE_ROOT /var/www/html;
     set $MAGE_MODE developer;
 
+    fastcgi_buffers 16 16k;
+    fastcgi_buffer_size 32k;
+
     include /etc/nginx/conf.d/magento.conf.sample;
 }

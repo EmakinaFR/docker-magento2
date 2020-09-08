@@ -22,12 +22,13 @@ services:
       - 1080:80
 
   mysql:
-    build: mysql
+    image: ajardin/magento2-mysql:${DOCKER_MYSQL_IMAGE}
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     ports:
       - 3306:3306
     volumes:
       - mysql:/var/lib/mysql
+      - ./mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf:ro
     tty: true
 
   nginx:

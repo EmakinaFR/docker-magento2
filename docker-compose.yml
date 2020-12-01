@@ -10,6 +10,9 @@ services:
   elasticsearch:
     image: ajardin/magento2-elasticsearch:latest
     env_file: ${PROJECT_LOCATION}/docker/local/.env
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
 

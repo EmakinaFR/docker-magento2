@@ -78,8 +78,8 @@ root: ## Display the commands to set up the environment for an advanced usage
 start: ## Start the environment
 	@docker-compose up --detach --remove-orphans
 
-	@if [[ "$$(mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "No sessions found" ]]; then \
-		mutagen create \
+	@if [[ "$$(mutagen sync list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "No( synchronization)? sessions found" ]]; then \
+		mutagen sync create \
 			--label=name="${COMPOSE_PROJECT_NAME}" \
 			--default-owner-beta="id:1000" \
 			--default-group-beta="id:1000" \

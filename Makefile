@@ -54,7 +54,7 @@ ps: ## List all containers managed by the environment
 
 purge: ## Purge all services, associated volumes and the Mutagen session
 	docker-compose down --volumes
-	mutagen terminate --label-selector='name==${COMPOSE_PROJECT_NAME}'
+	mutagen sync terminate --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
 restart: stop start ## Restart the environment
 
@@ -88,10 +88,10 @@ start: ## Start the environment
 			--symlink-mode="posix-raw" \
 		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"; \
 	else \
-		mutagen resume --label-selector='name==${COMPOSE_PROJECT_NAME}'; \
+		mutagen sync resume --label-selector='name==${COMPOSE_PROJECT_NAME}'; \
 	fi
 
-	@while [[ ! "$$(mutagen list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "Status: Watching for changes" ]]; do \
+	@while [[ ! "$$(mutagen sync list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "Status: Watching for changes" ]]; do \
 		echo "Waiting for synchronization to complete..."; \
 		sleep 10; \
 	done
@@ -101,7 +101,7 @@ stats: ## Print real-time statistics about containers ressources usage
 
 stop: ## Stop the environment
 	@docker-compose stop
-	@mutagen pause --label-selector='name==${COMPOSE_PROJECT_NAME}'
+	@mutagen sync pause --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
 yarn: ## Install Composer dependencies from the "php" container
 	$(PHP_SERVICE) "yarn install --cwd=/var/www/html"

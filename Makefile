@@ -91,6 +91,9 @@ start: ## Start the environment
 		mutagen sync resume --label-selector='name==${COMPOSE_PROJECT_NAME}'; \
 	fi
 
+	@echo "Fixing permissions on the shared SSH agent..."
+	@docker-compose exec -T php bash -c "chown www-data:www-data /run/host-services/ssh-auth.sock"
+
 	@while [[ ! "$$(mutagen sync list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "Status: Watching for changes" ]]; do \
 		echo "Waiting for synchronization to complete..."; \
 		sleep 10; \

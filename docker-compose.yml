@@ -8,7 +8,7 @@ services:
       - php
 
   elasticsearch:
-    image: ajardin/magento2-elasticsearch:latest
+    image: ajardin/magento2-elasticsearch:${DOCKER_ELASTICSEARCH_IMAGE}
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     environment:
       - discovery.type=single-node

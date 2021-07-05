@@ -11,6 +11,7 @@ export COMPOSE_PROJECT_NAME := magento2_$(shell echo $${PWD\#\#*/} | tr '[:upper
 export PROJECT_LOCATION := $(shell echo ${MAKEFILE_DIRECTORY})
 export DOCKER_PHP_IMAGE := $(shell grep DOCKER_PHP_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
 export DOCKER_MYSQL_IMAGE := $(shell grep DOCKER_MYSQL_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
+export DOCKER_ELASTICSEARCH_IMAGE := $(shell grep DOCKER_ELASTICSEARCH_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
 
 ##
 ## ----------------------------------------------------------------------------
@@ -71,6 +72,7 @@ root: ## Display the commands to set up the environment for an advanced usage
 	@echo "export PROJECT_LOCATION=${PROJECT_LOCATION}"
 	@echo "export DOCKER_PHP_IMAGE=${DOCKER_PHP_IMAGE}"
 	@echo "export DOCKER_MYSQL_IMAGE=${DOCKER_MYSQL_IMAGE}"
+	@echo "export DOCKER_ELASTICSEARCH_IMAGE=${DOCKER_ELASTICSEARCH_IMAGE}"
 	@echo ""
 	@echo "# Run this command to configure your shell:"
 	@echo "# eval \$$(make root)"
@@ -84,7 +86,7 @@ start: ## Start the environment
 			--default-owner-beta="id:1000" \
 			--default-group-beta="id:1000" \
 			--sync-mode="two-way-resolved" \
-			--ignore-vcs --ignore=".idea" --ignore="pub/static" \
+			--ignore-vcs --ignore="pub/static" \
 			--symlink-mode="posix-raw" \
 		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"; \
 	else \

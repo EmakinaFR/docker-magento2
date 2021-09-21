@@ -61,7 +61,7 @@ services:
     tty: true
 
   redis:
-    image: redis:3.2-alpine
+    image: redis:${DOCKER_REDIS_IMAGE}-alpine
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     volumes:
       - redis:/data

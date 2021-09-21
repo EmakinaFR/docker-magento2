@@ -12,6 +12,7 @@ export PROJECT_LOCATION := $(shell echo ${MAKEFILE_DIRECTORY})
 export DOCKER_PHP_IMAGE := $(shell grep DOCKER_PHP_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
 export DOCKER_MYSQL_IMAGE := $(shell grep DOCKER_MYSQL_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
 export DOCKER_ELASTICSEARCH_IMAGE := $(shell grep DOCKER_ELASTICSEARCH_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
+export DOCKER_REDIS_IMAGE := $(shell grep DOCKER_REDIS_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
 
 ##
 ## ----------------------------------------------------------------------------
@@ -73,6 +74,7 @@ root: ## Display the commands to set up the environment for an advanced usage
 	@echo "export DOCKER_PHP_IMAGE=${DOCKER_PHP_IMAGE}"
 	@echo "export DOCKER_MYSQL_IMAGE=${DOCKER_MYSQL_IMAGE}"
 	@echo "export DOCKER_ELASTICSEARCH_IMAGE=${DOCKER_ELASTICSEARCH_IMAGE}"
+	@echo "export DOCKER_REDIS_IMAGE=${DOCKER_REDIS_IMAGE}"
 	@echo ""
 	@echo "# Run this command to configure your shell:"
 	@echo "# eval \$$(make root)"

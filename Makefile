@@ -87,6 +87,8 @@ start: ## Start the environment
 			--default-group-beta="id:1000" \
 			--sync-mode="two-way-resolved" \
 			--ignore-vcs --ignore="pub/static" \
+			--ignore="var/page_cache/**" --ignore="var/composer_home/**" \
+			--ignore="var/view_preprocessed/**" --ignore="generated/**" \
 			--symlink-mode="posix-raw" \
 		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"; \
 	else \

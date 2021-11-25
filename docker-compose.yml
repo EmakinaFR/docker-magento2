@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   blackfire:
-    image: blackfire/blackfire
+    image: blackfire/blackfire:2
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     depends_on:
       - php

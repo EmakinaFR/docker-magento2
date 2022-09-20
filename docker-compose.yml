@@ -17,15 +17,15 @@ services:
       - elasticsearch:/usr/share/elasticsearch/data
 
   maildev:
-    image: djfarrelly/maildev
-    env_file: ${PROJECT_LOCATION}/docker/local/.env
+    image: maildev/maildev
     depends_on:
       - php
     ports:
-      - 1080:80
+      - 1080:1080
+      - 1025:1025
 
   mysql:
-    image: ajardin/magento2-mysql:${DOCKER_MYSQL_IMAGE}
+    image: mysql:${DOCKER_MYSQL_IMAGE}
     env_file: ${PROJECT_LOCATION}/docker/local/.env
     ports:
       - 3306:3306

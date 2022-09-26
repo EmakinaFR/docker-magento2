@@ -6,26 +6,26 @@ require __DIR__ . '/../../../autoload.php';
 use Symfony\Component\Filesystem\Filesystem;
 
 const SOURCE_DIRECTORY = 'vendor/emakinafr/docker-magento2';
-const TARGET_DIRECTORY = 'docker/local';
+const DOCKER_DIRECTORY = 'docker/local';
 
 $filesystem = new Filesystem();
 
 /**
  * Create the Docker directory at the project root
  */
-if ($filesystem->exists(TARGET_DIRECTORY) === false) {
-    $filesystem->mkdir(TARGET_DIRECTORY);
+if ($filesystem->exists(DOCKER_DIRECTORY) === false) {
+    $filesystem->mkdir(DOCKER_DIRECTORY);
 }
 
 /**
  * Define the default environment variables
  */
-$filesystem->copy(SOURCE_DIRECTORY . '/.env.dist', TARGET_DIRECTORY . '/.env.dist');
+$filesystem->copy(SOURCE_DIRECTORY . '/.env.dist', DOCKER_DIRECTORY . '/.env');
 
 /**
  * Define the default Nginx configuration
  */
-$filesystem->copy(SOURCE_DIRECTORY . '/nginx.conf.sample', TARGET_DIRECTORY . '/nginx.conf');
+$filesystem->copy(SOURCE_DIRECTORY . '/nginx.conf.sample', DOCKER_DIRECTORY . '/nginx.conf');
 
 /**
  * Copy the default Makefile at the project root

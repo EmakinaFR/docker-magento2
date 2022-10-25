@@ -58,6 +58,8 @@ services:
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH socket
       - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
+      # Composer cache
+      - ${COMPOSER_CACHE_DIR:-~/Library/Caches/composer}:/.composer/cache
     tty: true
 
   redis:

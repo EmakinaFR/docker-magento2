@@ -18,11 +18,12 @@ services:
 
   maildev:
     image: maildev/maildev
+    environment:
+        MAILDEV_SMTP_PORT: 25
     depends_on:
       - php
     ports:
       - 1080:1080
-      - 1025:1025
 
   mysql:
     image: mysql:${DOCKER_MYSQL_IMAGE}

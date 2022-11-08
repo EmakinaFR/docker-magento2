@@ -58,6 +58,9 @@ purge: ## Purge all services, associated volumes and the Mutagen session
 	docker compose down --volumes
 	mutagen sync terminate --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
+redis: ## Open a terminal in the "redis" container
+	docker compose exec redis sh
+
 restart: stop start ## Restart the environment
 
 restore: ## Restore the "mysql" volume

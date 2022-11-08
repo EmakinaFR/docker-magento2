@@ -17,12 +17,13 @@ services:
       - elasticsearch:/usr/share/elasticsearch/data
 
   maildev:
-    image: djfarrelly/maildev
-    env_file: ${PROJECT_LOCATION}/docker/local/.env
+    image: maildev/maildev
+    environment:
+        MAILDEV_SMTP_PORT: 25
     depends_on:
       - php
     ports:
-      - 1080:80
+      - 1080:1080
 
   mysql:
     image: mysql:${DOCKER_MYSQL_IMAGE}

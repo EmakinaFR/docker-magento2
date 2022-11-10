@@ -30,8 +30,8 @@ build: ## Build the environment
 	docker compose build --pull
 
 cache: ## Flush cache stored in Redis
-	docker compose exec redis bash -c "redis-cli -n 1 FLUSHDB"
-	docker compose exec redis bash -c "redis-cli -n 2 FLUSHDB"
+	docker compose exec redis sh -c "redis-cli -n 1 FLUSHDB"
+	docker compose exec redis sh -c "redis-cli -n 2 FLUSHDB"
 
 composer: ## Install Composer dependencies from the "php" container
 	$(PHP_SERVICE) "composer install --optimize-autoloader --prefer-dist --working-dir=/var/www/html"
@@ -57,6 +57,9 @@ ps: ## List all containers managed by the environment
 purge: ## Purge all services, associated volumes and the Mutagen session
 	docker compose down --volumes
 	mutagen sync terminate --label-selector='name==${COMPOSE_PROJECT_NAME}'
+
+redis: ## Open a terminal in the "redis" container
+	docker compose exec redis sh
 
 restart: stop start ## Restart the environment
 

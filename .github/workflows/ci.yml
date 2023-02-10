@@ -11,21 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          # Repository name with owner. For example, actions/checkout
-          # Default: ${{ github.repository }}
-          repository: 'magento/magento2'
 
       - name: "Prepare building context"
         run: |
-          ls -la
           #sudo mkdir -p docker/local
           #sudo cp ../.env.dist docker/local/.env
 
       - name: "Build containers"
         run: |
-          #export $(/docker/local/.env | sed 's/#.*//g' | xargs)
-          #docker-compose up -d
+          export $(.env.dist | sed 's/#.*//g' | xargs)
+          docker-compose up -d
         env:
           COMPOSE_PROJECT_NAME: magento
 

@@ -13,12 +13,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: "Clone Magento2 project"
-        run: gh repo clone magento/magento2
+        run: git clone https://github.com/magento/magento2.git
 
-      #- name: "Prepare building context"
-      #  run: |
-      #    sudo mkdir -p /docker/local
-      #    sudo cp .env.dist /docker/local/.env
+      - name: "Prepare building context"
+        run: |
+          sudo mkdir -p /docker/local
+          sudo cp .env.dist /docker/local/.env
 
       #- name: "Build containers"
       #  run: |

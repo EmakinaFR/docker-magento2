@@ -17,8 +17,11 @@ jobs:
 
       - name: "Prepare building context"
         run: |
-          sudo mkdir -p /docker/local
-          sudo cp .env.dist /docker/local/.env
+          ls -la
+          cd magento2
+          sudo mkdir -p docker/local
+          sudo cp ../.env.dist docker/local/.env
+          ls -la
 
       #- name: "Build containers"
       #  run: |

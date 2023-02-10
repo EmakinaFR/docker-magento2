@@ -14,7 +14,7 @@ jobs:
 
       - name: "Build containers"
         run: |
-          export $(cat /docker/local/.env.dist | sed 's/#.*//g' | xargs)
+          export $(cat .env.dist | sed 's/#.*//g' | xargs)
           docker-compose up -d
         env:
           COMPOSE_PROJECT_NAME: magento

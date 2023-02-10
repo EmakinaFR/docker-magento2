@@ -14,8 +14,9 @@ jobs:
 
       - name: "Prepare building context"
         run: |
-          #sudo mkdir -p docker/local
-          #sudo cp ../.env.dist docker/local/.env
+          sudo mkdir -p docker/local
+          sudo cp .env.dist docker/local/.env
+          pwd
 
       - name: "Build containers"
         run: |

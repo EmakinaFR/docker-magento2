@@ -12,12 +12,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: "Build containers"
-        run: |
-          export $(cat .env.dist | sed 's/#.*//g' | xargs)
-          docker-compose up -d
-        env:
-          COMPOSE_PROJECT_NAME: magento
+      - name: "Clone Magento2 project"
+        run: gh repo clone magento/magento2
+
+      #- name: "Prepare building context"
+      #  run: |
+      #    sudo mkdir -p /docker/local
+      #    sudo cp .env.dist /docker/local/.env
+
+      #- name: "Build containers"
+      #  run: |
+      #    export $(/docker/local/.env | sed 's/#.*//g' | xargs)
+      #    docker-compose up -d
+      #  env:
+      #    COMPOSE_PROJECT_NAME: magento
 
       - name: "Display images & containers"
         run: |

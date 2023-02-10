@@ -10,28 +10,26 @@ jobs:
     name: "Docker"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        run: |
-          ls -la
-          exit 1
-
-      #- name: "Clone Magento2 project"
-        run: git clone https://github.com/magento/magento2.git
+      - uses: actions/checkout@v3
+        with:
+          # Repository name with owner. For example, actions/checkout
+          # Default: ${{ github.repository }}
+          repository: 'magento/magento2'
 
       - name: "Prepare building context"
         run: |
-          cd magento2
-          sudo mkdir -p docker/local
-          sudo cp ../.env.dist docker/local/.env
+          ls -la
+          #sudo mkdir -p docker/local
+          #sudo cp ../.env.dist docker/local/.env
 
       - name: "Build containers"
         run: |
-          export $(/docker/local/.env | sed 's/#.*//g' | xargs)
-          docker-compose up -d
+          #export $(/docker/local/.env | sed 's/#.*//g' | xargs)
+          #docker-compose up -d
         env:
           COMPOSE_PROJECT_NAME: magento
 
       - name: "Display images & containers"
         run: |
-          docker images
-          docker ps
+          #docker images
+          #docker ps

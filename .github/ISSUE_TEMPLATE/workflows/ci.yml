@@ -1,0 +1,25 @@
+name: "Continuous Integration"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  docker:
+    name: "Docker"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: "Prepare building context"
+        run: |
+          sudo mkdir -p /docker/local
+          sudo cp .env.dist /docker/local/.env
+      - name: "Build containers"
+        run: docker-compose up -d
+
+      - name: "Display images & containers"
+        run: |
+          docker images
+          docker ps

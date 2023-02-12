@@ -14,13 +14,13 @@ jobs:
 
       - name: "Prepare building context"
         run: |
-          sudo mkdir -p docker/local
-          sudo cp .env.dist docker/local/.env
+          #sudo mkdir -p docker/local
+          #sudo cp .env.dist docker/local/.env
+          sed -i '/${PROJECT_LOCATION}/d' docker-compose.yml
 
       - name: "Build containers"
         run: |
-          #export $(.env.dist | sed 's/#.*//g' | xargs)
-          PROJECT_LOCATION=$(pwd)
+          export $(.env.dist | sed 's/#.*//g' | xargs)
           docker-compose up -d
         env:
           COMPOSE_PROJECT_NAME: magento

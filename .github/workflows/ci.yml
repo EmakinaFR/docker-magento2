@@ -20,7 +20,9 @@ jobs:
 
       - name: "Build containers"
         run: |
-          export $(.env.dist | sed 's/#.*//g' | xargs)
+          # the time that #90 be merged
+          sed -i '/PHP_IDE_CONFIG/d' .env.dist
+          export $(cat .env.dist | sed 's/#.*//g' | xargs)
           docker-compose up -d
         env:
           COMPOSE_PROJECT_NAME: magento

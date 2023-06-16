@@ -1,0 +1,32 @@
+name: "Continuous Integration"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  docker:
+    name: "Docker"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Prepare building context"
+        run: |
+          # the time that #90 be merged
+          sed -i '/PHP_IDE_CONFIG/d' .env.dist
+
+          sed -i '/${PROJECT_LOCATION}/d' docker-compose.yml
+
+      - name: "Build containers"
+        run: |
+          export $(cat .env.dist | sed 's/#.*//g' | xargs)
+          docker-compose up -d
+        env:
+          COMPOSE_PROJECT_NAME: magento
+
+      - name: "Display images & containers"
+        run: |
+          docker images
+          docker ps

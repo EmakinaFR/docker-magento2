@@ -90,7 +90,7 @@ start: ## Start the environment
 			--label=name="${COMPOSE_PROJECT_NAME}" \
 			--default-owner-beta="id:1000" \
 			--default-group-beta="id:1000" \
-			--sync-mode="two-way-resolved" \
+			--mode="two-way-resolved" \
 			--ignore-vcs --ignore="pub/static" \
 			--ignore="var/page_cache/**" --ignore="var/composer_home/**" \
 			--ignore="var/view_preprocessed/**" --ignore="generated/**" \

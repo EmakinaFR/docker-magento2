@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
   blackfire:
     image: blackfire/blackfire:2
@@ -42,7 +40,7 @@ services:
       - 443:443
     volumes:
       # Project files
-      - code_sync:/var/www/html:nocopy
+      - ${PROJECT_LOCATION}:/var/www/html:rw,delegated
       # Custom configuration
       - ${PROJECT_LOCATION}/docker/local/nginx.conf:/etc/nginx/conf.d/custom.conf:ro
     tty: true
@@ -54,7 +52,7 @@ services:
       - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
     volumes:
       # Project files
-      - code_sync:/var/www/html:nocopy
+      - ${PROJECT_LOCATION}:/var/www/html:rw,delegated
       # Custom configuration
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH socket
@@ -70,14 +68,7 @@ services:
       - redis:/data
     tty: true
 
-  synchro:
-    image: ajardin/synchro:latest
-    container_name: ${COMPOSE_PROJECT_NAME}_synchro
-    volumes:
-      - code_sync:/var/www/html:nocopy
-
 volumes:
-  code_sync: {}
   elasticsearch: {}
   mysql: {}
   redis: {}

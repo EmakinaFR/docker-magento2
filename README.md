@@ -13,9 +13,9 @@ This repository allows the creation of a Docker environment that meets
 * `nginx`: [ajardin/magento2-nginx](https://hub.docker.com/r/ajardin/magento2-nginx) custom image with HTTPS (web server).
 * `php` : [ajardin/php](https://hub.docker.com/r/ajardin/php) custom image with additional extensions and Composer.
 * `redis`: [redis](https://store.docker.com/images/redis) image (Magento session and caches).
-* `synchro`: [ajardin/synchro](https://hub.docker.com/r/ajardin/synchro) image (Synchronization using [Mutagen](https://mutagen.io/)).
 
 ## Documentation
 > In order to make things more readable, and maintainable, the documentation has been migrated to
 the [repository Wiki](https://github.com/EmakinaFR/docker-magento2/wiki). Where you will find all details about the 
 installation process along the available instructions for the day-to-day work. 
+

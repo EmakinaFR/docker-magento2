@@ -54,9 +54,8 @@ php: ## Open a terminal in the "php" container
 ps: ## List all containers managed by the environment
 	docker compose ps
 
-purge: ## Purge all services, associated volumes and the Mutagen session
+purge: ## Purge all services, associated volumes
 	docker compose down --volumes
-	mutagen sync terminate --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
 redis: ## Open a terminal in the "redis" container
 	docker compose exec redis sh
@@ -85,35 +84,11 @@ root: ## Display the commands to set up the environment for an advanced usage
 start: ## Start the environment
 	@docker compose up --detach --remove-orphans
 
-	@if [[ ! "$$(mutagen sync list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "${COMPOSE_PROJECT_NAME}" ]]; then \
-		mutagen sync create \
-			--label=name="${COMPOSE_PROJECT_NAME}" \
-			--default-owner-beta="id:1000" \
-			--default-group-beta="id:1000" \
-			--mode="two-way-resolved" \
-			--ignore-vcs --ignore="pub/static" \
-			--ignore="var/page_cache/**" --ignore="var/composer_home/**" \
-			--ignore="var/view_preprocessed/**" --ignore="generated/**" \
-			--symlink-mode="posix-raw" \
-		"${PROJECT_LOCATION}" "docker://${COMPOSE_PROJECT_NAME}_synchro/var/www/html/"; \
-	else \
-		mutagen sync resume --label-selector='name==${COMPOSE_PROJECT_NAME}'; \
-	fi
-
-	@echo "Fixing permissions on the shared SSH agent..."
-	@docker compose exec -T php bash -c "chown www-data:www-data /run/host-services/ssh-auth.sock"
-
-	@while [[ ! "$$(mutagen sync list --label-selector='name==${COMPOSE_PROJECT_NAME}')" =~ "Status: Watching for changes" ]]; do \
-		echo "Waiting for synchronization to complete..."; \
-		sleep 10; \
-	done
-
 stats: ## Print real-time statistics about containers ressources usage
 	docker stats $(docker ps --format={{.Names}})
 
 stop: ## Stop the environment
 	@docker compose stop
-	@mutagen sync pause --label-selector='name==${COMPOSE_PROJECT_NAME}'
 
 yarn: ## Install Composer dependencies from the "php" container
 	$(PHP_SERVICE) "yarn install --cwd=/var/www/html"

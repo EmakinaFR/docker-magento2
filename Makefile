@@ -5,7 +5,7 @@ SHELL := /bin/bash
 PHP_SERVICE := docker compose exec -u www-data:www-data php bash -c
 
 # Define a dynamic project name that will be prepended to each service name
-export COMPOSE_PROJECT_NAME := magento2_$(shell echo $${PWD\#\#*/} | tr '[:upper:]' '[:lower:]')
+export COMPOSE_PROJECT_NAME := magento2_$(shell echo $$(basename $$(pwd)) | tr '[:upper:]' '[:lower:]')
 
 # Extract environment variables needed by the environment
 export PROJECT_LOCATION := $(shell echo ${MAKEFILE_DIRECTORY})

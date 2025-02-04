@@ -9,10 +9,15 @@ export COMPOSE_PROJECT_NAME := magento2_$(shell echo $$(basename $$(pwd)) | tr '
 
 # Extract environment variables needed by the environment
 export PROJECT_LOCATION := $(shell echo ${MAKEFILE_DIRECTORY})
-export DOCKER_PHP_IMAGE := $(shell grep DOCKER_PHP_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
-export DOCKER_MYSQL_IMAGE := $(shell grep DOCKER_MYSQL_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
-export DOCKER_ELASTICSEARCH_IMAGE := $(shell grep DOCKER_ELASTICSEARCH_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
-export DOCKER_REDIS_IMAGE := $(shell grep DOCKER_REDIS_IMAGE ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
+
+define load_env_var
+$(shell grep $(1) ${MAKEFILE_DIRECTORY}docker/local/.env | awk -F '=' '{print $$NF}')
+endef
+
+export DOCKER_PHP_IMAGE := $(call load_env_var,DOCKER_PHP_IMAGE)
+export DOCKER_MYSQL_IMAGE := $(call load_env_var,DOCKER_MYSQL_IMAGE)
+export DOCKER_ELASTICSEARCH_IMAGE := $(call load_env_var,DOCKER_ELASTICSEARCH_IMAGE)
+export DOCKER_REDIS_IMAGE := $(call load_env_var,DOCKER_REDIS_IMAGE)
 
 ##
 ## ----------------------------------------------------------------------------
@@ -82,7 +87,11 @@ root: ## Display the commands to set up the environment for an advanced usage
 	@echo "# eval \$$(make root)"
 
 start: ## Start the environment
-	@docker compose up --detach --remove-orphans
+	@if [ -f "$(PROJECT_LOCATION)/docker/local/magento.conf" ]; then \
+		docker compose -f $(COMPOSE_FILE) -f $(DOCKER_PATH)/docker-compose.override.yml up --detach --remove-orphans; \
+	else \
+		docker compose -f $(COMPOSE_FILE) up --detach --remove-orphans; \
+	fi
 
 stats: ## Print real-time statistics about containers ressources usage
 	docker stats $(docker ps --format={{.Names}})

@@ -17,6 +17,7 @@ jobs:
           sed -i '/PROJECT_LOCATION/d' docker-compose.yml
           # Remove nginx block because of its "volumes" empty array
           sed -i '/^\s*nginx:/,/^ *$/d' docker-compose.yml
+          rm docker-compose.override.yml
 
       - name: "Build containers"
         run: |
